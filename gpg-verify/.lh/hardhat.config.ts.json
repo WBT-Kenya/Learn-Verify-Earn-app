@@ -1,0 +1,18 @@
+{
+    "sourceFile": "hardhat.config.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1711003163538,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1711003163538,
+            "name": "Commit-0",
+            "content": "import { HardhatUserConfig } from \"hardhat/config\";\n\nimport \"hardhat-deploy\";\nimport \"hardhat-deploy-ethers\";\n\nconst config: HardhatUserConfig = {\n  networks: {\n    localhost: {\n      url: \"http://localhost:8545\",\n    },\n  },\n  solidity: {\n    version: \"0.7.4\",\n  },\n  external: {\n    contracts: [\n      {\n        artifacts: \"node_modules/@cartesi/compute-sdk/export/artifacts\",\n        deploy: \"node_modules/@cartesi/compute-sdk/dist/deploy\",\n      },\n    ],\n    deployments: {\n      localhost: [\"../compute-env/deployments/localhost\"],\n    },\n  },\n  namedAccounts: {\n    deployer: {\n      default: 0,\n    },\n    alice: {\n      default: 0,\n    },\n    bob: {\n      default: 1,\n    },\n  },\n};\n\nexport default config;"
+        }
+    ]
+}

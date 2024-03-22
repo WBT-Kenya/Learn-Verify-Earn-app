@@ -1,0 +1,214 @@
+version: '3'
+services:
+  
+  hardhatnet:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      MNEMONIC: "test test test test test test test test test test test junk"
+    expose:
+      - 8545
+    ports:
+      - 8545:8545
+    volumes:
+      - ./deployments:/opt/cartesi/share/blockchain/deployments
+    networks:
+      - ethereum
+
+  alice_dispatcher:
+    image: cartesi/compute:1.3.0
+    restart: always
+    environment:
+      MNEMONIC: "test test test test test test test test test test test junk"
+      ACCOUNT_INDEX: 0
+      RUST_LOG: dispatcher=info,transaction=info,configuration=info,utils=info,state=info,cartesi_compute=info
+      WEB3_PROVIDER_URI: http://hardhatnet:8545
+      DEPLOYMENT_SEMAPHORE: http://hardhatnet:8545
+      ETHEREUM_HOST: hardhatnet
+      ETHEREUM_PORT: 8545
+      ETHEREUM_NETWORK: localhost
+      QUERY_PORT: 3001
+      MACHINE_MANAGER_HOST: machine-manager
+      MACHINE_MANAGER_PORT: 50051
+      LOGGER_HOST: logger
+      LOGGER_PORT: 50051
+      IPFS_HOST: ipfs
+      IPFS_PORT: 50051
+      DOCKER: "TRUE"
+      RUST_BACKTRACE: 1
+    volumes:
+      # remove deployments mapping to use supported testnets' deployment info
+      - ./deployments:/opt/cartesi/share/blockchain/deployments:ro
+      - ./alice_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ethereum: {}
+      alice:
+        aliases:
+          - dispatcher
+    ports:
+      - "3001:3001"
+
+  alice_logger:
+    image: cartesi/logger-server:0.8.0
+    command: [ "-c", "/opt/cartesi/share/blockchain/deployments/localhost/Logger.json", "-d", "/opt/cartesi/srv/compute/flashdrive"]
+    # command: [ "-c", "/opt/cartesi/share/blockchain/node_modules/@cartesi/logger/deployments/goerli/Logger.json", "-d", "/opt/cartesi/srv/compute/flashdrive"]
+    volumes:
+      # remove deployments mapping to use supported testnets' deployment info
+      - ./deployments:/opt/cartesi/share/blockchain/deployments:ro
+      - ./alice_data:/opt/cartesi/srv/compute/flashdrive
+    environment:
+      MNEMONIC: "test test test test test test test test test test test junk"
+      ACCOUNT_INDEX: 0
+      WEB3_PROVIDER_URI: http://hardhatnet:8545
+      DEPLOYMENT_SEMAPHORE: http://hardhatnet:8545
+    networks:
+      ethereum: {}
+      alice:
+        aliases:
+          - logger
+
+  alice_ipfs:
+    image: cartesi/ipfs-server:0.3.0
+    volumes:
+      - ./alice_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ipfs: {}
+      alice:
+        aliases:
+          - ipfs
+    ports:
+        - "50051:50051"
+    command: ["-g", "http://alice_kubo:5001"]
+
+  alice_machine_manager:
+    image: cartesi/machine-manager:0.6.0-rc3
+    volumes:
+      - ./machines:/opt/cartesi/srv/compute/cartesi-machine
+      - ./alice_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ethereum: {}
+      alice:
+        aliases:
+          - machine-manager
+    command: [ "./bin/machine-manager", "--address", "0.0.0.0", "--port", "50051","--port-checkin","50052"]
+
+  alice_kubo:
+    image: ipfs/kubo:v0.14.0
+    command:
+      [
+        "daemon",
+        "--migrate=true",
+        "--enable-pubsub-experiment",
+        "--enable-gc",
+        "--routing=dhtclient"
+      ]
+    ports: 
+      - "127.0.0.1:5008:5001"
+    environment:
+      IPFS_PROFILE: "server"
+    networks:
+      ipfs:
+        aliases:
+          - alice_kubo
+
+  bob_dispatcher:
+    image: cartesi/compute:1.3.0
+    restart: always
+    environment:
+      MNEMONIC: "test test test test test test test test test test test junk"
+      ACCOUNT_INDEX: 1
+      RUST_LOG: dispatcher=info,transaction=info,configuration=info,utils=info,state=info,cartesi_compute=info
+      WEB3_PROVIDER_URI: http://hardhatnet:8545
+      DEPLOYMENT_SEMAPHORE: http://hardhatnet:8545
+      ETHEREUM_HOST: hardhatnet
+      ETHEREUM_PORT: 8545
+      ETHEREUM_NETWORK: localhost
+      QUERY_PORT: 3001
+      MACHINE_MANAGER_HOST: machine-manager
+      MACHINE_MANAGER_PORT: 50051
+      LOGGER_HOST: logger
+      LOGGER_PORT: 50051
+      IPFS_HOST: ipfs
+      IPFS_PORT: 50051
+      DOCKER: "TRUE"
+      RUST_BACKTRACE: 1
+    volumes:
+      # remove deployments mapping to use supported testnets' deployment info
+      - ./deployments:/opt/cartesi/share/blockchain/deployments:ro
+      - ./bob_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ethereum: {}
+      bob:
+        aliases:
+          - dispatcher
+    ports:
+      - "3002:3001"
+
+  bob_logger:
+    image: cartesi/logger-server:0.8.0
+    command: [ "-c", "/opt/cartesi/share/blockchain/deployments/localhost/Logger.json", "-d", "/opt/cartesi/srv/compute/flashdrive"]
+    # command: [ "-c", "/opt/cartesi/share/blockchain/node_modules/@cartesi/logger/deployments/goerli/Logger.json", "-d", "/opt/cartesi/srv/compute/flashdrive"]
+    volumes:
+      # remove deployments mapping to use supported testnets' deployment info
+      - ./deployments:/opt/cartesi/share/blockchain/deployments:ro
+      - ./bob_data:/opt/cartesi/srv/compute/flashdrive
+    environment:
+      MNEMONIC: "test test test test test test test test test test test junk"
+      ACCOUNT_INDEX: 1
+      WEB3_PROVIDER_URI: http://hardhatnet:8545
+      DEPLOYMENT_SEMAPHORE: http://hardhatnet:8545
+    networks:
+      ethereum: {}
+      bob:
+        aliases:
+          - logger
+
+  bob_ipfs:
+    image: cartesi/ipfs-server:0.3.0		
+    volumes:
+      - ./bob_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ipfs: {}
+      bob:
+        aliases:
+          - ipfs
+    ports:	
+        - "50052:50051"
+    command: ["-g", "http://bob_kubo:5001"]
+
+  bob_machine_manager:
+    image: cartesi/machine-manager:0.6.0-rc3
+    volumes:
+      - ./machines:/opt/cartesi/srv/compute/cartesi-machine
+      - ./bob_data:/opt/cartesi/srv/compute/flashdrive
+    networks:
+      ethereum: {}
+      bob:
+        aliases:
+          - machine-manager
+    command: [ "./bin/machine-manager", "--address", "0.0.0.0", "--port", "50051","--port-checkin","50052"]
+
+  bob_kubo:
+    image: ipfs/kubo:v0.14.0
+    command:
+      [
+        "daemon",
+        "--migrate=true",
+        "--enable-pubsub-experiment",
+        "--enable-gc",
+        "--routing=dhtclient"
+      ]
+    environment:
+      IPFS_PROFILE: "server"
+    networks: 
+      ipfs:
+        aliases:
+          - bob_kubo
+
+
+networks:
+  ipfs:
+  ethereum:
+  alice:
+  bob:

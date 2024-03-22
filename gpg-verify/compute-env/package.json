@@ -1,0 +1,29 @@
+{
+  "name": "@cartesi/compute-env",
+  "description": "Cartesi Compute environment for local DApp development",
+  "version": "1.3.0",
+  "dependencies": {
+    "@cartesi/compute-sdk": "^1.3.0"
+  },
+  "devDependencies": {
+    "ethers": "5.4.7",
+    "hardhat": "^2.14.0",
+    "hardhat-deploy": "^0.11.26",
+    "hardhat-deploy-ethers": "^0.3.0-beta.13",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cartesi/compute-tutorials.git"
+  },
+  "keywords": [
+    "cartesi"
+  ],
+  "author": "Milton Jonathan <milton.jonathan@cartesi.io>",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/cartesi/compute-tutorials/issues"
+  },
+  "homepage": "https://github.com/cartesi/compute-tutorials#readme"
+}

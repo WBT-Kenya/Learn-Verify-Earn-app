@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@cartesi/compute-sdk": "1.3.0"
+  },
+  "devDependencies": {
+    "hardhat": "^2.22.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}

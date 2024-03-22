@@ -1,0 +1,18 @@
+{
+    "sourceFile": "deploy/01_contracts.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1711009673076,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1711009673076,
+            "name": "Commit-0",
+            "content": "import { HardhatRuntimeEnvironment } from \"hardhat/types\";\nimport { DeployFunction } from \"hardhat-deploy/types\";\n\nconst func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {\n  const { deployments, getNamedAccounts } = hre;\n  const { deploy, get } = deployments;\n  const { deployer } = await getNamedAccounts();\n\n  const CartesiCompute = await get(\"CartesiCompute\");\n  await deploy(\"GpgVerify\", {\n    from: deployer,\n    log: true,\n    args: [CartesiCompute.address],\n  });\n};\n\nexport default func;"
+        }
+    ]
+}

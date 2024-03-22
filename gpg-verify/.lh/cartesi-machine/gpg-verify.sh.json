@@ -1,0 +1,18 @@
+{
+    "sourceFile": "cartesi-machine/gpg-verify.sh",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1711004670910,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1711004670910,
+            "name": "Commit-0",
+            "content": "#!/bin/sh\n\n# reads document data as a binary string whose length is encoded in the first 4 bytes, and stores it in file 'document'\ndd status=none if=$(flashdrive document) | lua -e 'io.write((string.unpack(\">s4\",  io.read(\"a\"))))' > document\n\n# reads signature data as a binary string whose length is encoded in the first 4 bytes, and stores it in file 'signature'\ndd status=none if=$(flashdrive signature) | lua -e 'io.write((string.unpack(\">s4\",  io.read(\"a\"))))' > signature\n\n# imports public key informing that it can be trusted (0xA86D9CB964EB527E is the key's LONG id)\ngpg --trusted-key 0xA86D9CB964EB527E --import /mnt/dapp-data/compute-pub.key\n\n# verifies document signature\ngpg --verify signature document\n\n# writes gpg verify's exit status to output: 0 is success, 1 is failure, other values indicate error\necho $? > $(flashdrive output)"
+        }
+    ]
+}

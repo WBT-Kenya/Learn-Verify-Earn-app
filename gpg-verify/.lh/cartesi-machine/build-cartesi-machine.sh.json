@@ -1,0 +1,18 @@
+{
+    "sourceFile": "cartesi-machine/build-cartesi-machine.sh",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1711005086998,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1711005086998,
+            "name": "Commit-0",
+            "content": "#!/bin/bash\n\n# general definitions\nMACHINES_DIR=.\nMACHINE_TEMP_DIR=__temp_machine\nCARTESI_PLAYGROUND_DOCKER=cartesi/playground:0.5.0\n\n# set machines directory to specified path if provided\nif [ $1 ]; then\n  MACHINES_DIR=$1\nfi\n\n# removes machine temp store directory if it exists\nif [ -d \"$MACHINE_TEMP_DIR\" ]; then\n  rm -r $MACHINE_TEMP_DIR\nfi\n\n# builds machine (running with 0 cycles)\n# - initial (template) hash is printed on screen\n# - machine is stored in temporary directory\ndocker run \\\n  -e USER=$(id -u -n) \\\n  -e GROUP=$(id -g -n) \\\n  -e UID=$(id -u) \\\n  -e GID=$(id -g) \\\n  -v `pwd`:/home/$(id -u -n) \\\n  -w /home/$(id -u -n) \\\n  --rm $CARTESI_PLAYGROUND_DOCKER cartesi-machine \\\n    --max-mcycle=0 \\\n    --initial-hash \\\n    --append-rom-bootargs=\"single=yes\" \\\n    --store=\"$MACHINE_TEMP_DIR\" \\\n    --flash-drive=\"label:dapp-data,filename:dapp-data.ext2\" \\\n    --flash-drive=\"label:document,length:1<<22\" \\\n    --flash-drive=\"label:signature,length:1<<12\" \\\n    --flash-drive=\"label:output,length:1<<12\" \\\n    -- $'date -s \\'2100-01-01\\' && /mnt/dapp-data/gpg-verify.sh'\n\n# defines target directory as being within $MACHINES_DIR and named after the stored machine's hash\nMACHINE_TARGET_DIR=$MACHINES_DIR/$(docker run \\\n  -e USER=$(id -u -n) \\\n  -e GROUP=$(id -g -n) \\\n  -e UID=$(id -u) \\\n  -e GID=$(id -g) \\\n  -v `pwd`:/home/$(id -u -n) \\\n  -h playground \\\n  -w /home/$(id -u -n) \\\n  --rm $CARTESI_PLAYGROUND_DOCKER cartesi-machine-stored-hash $MACHINE_TEMP_DIR/ | tail -n 1)\n\n# moves stored machine to the target directory\nif [ -d \"$MACHINE_TARGET_DIR\" ]; then\n  rm -r $MACHINE_TARGET_DIR\nfi\nmv $MACHINE_TEMP_DIR $MACHINE_TARGET_DIR"
+        }
+    ]
+}
