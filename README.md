@@ -1,24 +1,24 @@
-# Social Learn, Verify To Earn Platform
+# Social Learn, Verify To Earn Platform:
 
-### Getting Started
+### Getting Started:
 
-## Installations
--cd GpgVerify
+## Installations:
+cd GpgVerify
 -cd cartesi-machine
 -$ docker-compose up
 - ./build-cartesi-machine.sh ../../compute-env/machines
 
-## Deployment
+## Deployment:
 -$ yarn
 -$ npx hardhat deploy --network localhost
 -$ npx hardhat console --network localhost
 
-## Hardhat configurations
+## Hardhat configurations:
 -$ yarn add @cartesi/compute-sdk
 -$ yarn add ethers hardhat hardhat-deploy hardhat-deploy-ethers --dev
 -$ yarn add typescript ts-node --dev
 
-## Languages&Stack
+## Languages&Stack:
 - Reactjs
 - Solidity
 - GPG Verify machine
