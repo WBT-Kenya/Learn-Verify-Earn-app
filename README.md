@@ -3,10 +3,10 @@
 ### Getting Started:
 
 ## Installations:
-- GpgVerify
+- cd GpgVerify
 - cd cartesi-machine
 - docker-compose up
--./build-cartesi-machine.sh ../../compute-env/machines
+- ./build-cartesi-machine.sh ../../compute-env/machines
 
 ## Deployment:
 - yarn
