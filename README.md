@@ -35,4 +35,5 @@
   - Test the application by logging in your credentials.
 
 ## Architecture diagram
+![architecture dgm for cartesi rollup](https://github.com/WBT-Kenya/Learn-Verify-Earn-app/assets/9214845/402c46bf-c9f3-4ce2-a0ee-2cb811c53b33)
 
