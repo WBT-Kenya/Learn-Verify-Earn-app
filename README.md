@@ -3,7 +3,7 @@
 ### Getting Started:
 
 ## Installations:
-cd GpgVerify
+- GpgVerify
 - cd cartesi-machine
 - docker-compose up
 -./build-cartesi-machine.sh ../../compute-env/machines
