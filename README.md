@@ -1,8 +1,10 @@
-# Social Learn, Verify To Earn Platform:
+# Social Learn, Verify, Earn Platform:
 
 ### Getting Started:
 
 ## Installations:
+- git clone https://github.com/WBT-Kenya/Learn-Verify-Earn-app.git
+- git checkout master
 - cd GpgVerify
 - cd cartesi-machine
 - docker-compose up
