@@ -5,18 +5,18 @@
 ## Installations:
 cd GpgVerify
 -cd cartesi-machine
--$ docker-compose up
-- ./build-cartesi-machine.sh ../../compute-env/machines
+-docker-compose up
+-./build-cartesi-machine.sh ../../compute-env/machines
 
 ## Deployment:
--$ yarn
--$ npx hardhat deploy --network localhost
--$ npx hardhat console --network localhost
+-yarn
+-npx hardhat deploy --network localhost
+-npx hardhat console --network localhost
 
 ## Hardhat configurations:
--$ yarn add @cartesi/compute-sdk
--$ yarn add ethers hardhat hardhat-deploy hardhat-deploy-ethers --dev
--$ yarn add typescript ts-node --dev
+-yarn add @cartesi/compute-sdk
+-yarn add ethers hardhat hardhat-deploy hardhat-deploy-ethers --dev
+-yarn add typescript ts-node --dev
 
 ## Languages&Stack:
 - Reactjs
